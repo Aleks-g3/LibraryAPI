@@ -22,5 +22,19 @@ namespace LibraryAPI.Models
         /// Should be taken from given API
         /// </summary>
         public double CurrentPrice { get; set; }
+
+        public static BookDetails Create(BookEntity book, BookPrice bookPrice) =>
+            new BookDetails()
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Language = book.Language,
+                PublicationDate = book.PublicationDate ?? DateTime.MinValue,
+                Genre = book.Genre ?? BookGenres.Unknown,
+                CurrentStatus = book.CurrentStatus.Status,
+                Author = book.BookAuthor != null ? Author.Create(book.BookAuthor.Author) : null,
+                IsPolish = book.Language.ToLower().Contains("polski"),
+                CurrentPrice = bookPrice.Price
+            };
     }
 }

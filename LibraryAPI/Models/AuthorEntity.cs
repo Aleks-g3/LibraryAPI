@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace LibraryAPI.Models
 {
-    public class AuthorEntity
+    public class AuthorEntity : Entity
     {
-        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public List<BookAuthorEntity> BookAuthors { get; set; }
+        public ICollection<BookAuthorEntity> BookAuthors { get; set; } = new List<BookAuthorEntity>();
     }
 }

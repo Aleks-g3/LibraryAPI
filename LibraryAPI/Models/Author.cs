@@ -9,5 +9,12 @@ namespace LibraryAPI.Models
         /// </summary>
         public string Name { get; set; }
         public DateTime DateOfBirth { get; set; }
+
+        public static Author Create(AuthorEntity author) =>
+            new Author()
+            {
+                Name = $"{author.FirstName} {author.LastName}",
+                DateOfBirth = author.DateOfBirth ?? DateTime.MinValue
+            };
     }
 }

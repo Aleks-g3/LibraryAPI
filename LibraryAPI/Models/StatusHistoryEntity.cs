@@ -6,12 +6,21 @@ using System.Threading.Tasks;
 
 namespace LibraryAPI.Models
 {
-    public class StatusHistoryEntity
+    public class StatusHistoryEntity : Entity
     {
-        public Guid Id { get; set; }
         public Guid BookId { get; set; }
         public BookEntity Book { get; set; }
         public DateTime ModifiedDate { get; set; }
         public Statuses Status { get; set; }
+
+        public static StatusHistoryEntity Create(BookEntity book,Statuses status)
+        {
+            return new StatusHistoryEntity()
+            {
+                BookId = book.Id,
+                ModifiedDate = DateTime.Now,
+                Status = status
+            };
+        }
     }
 }

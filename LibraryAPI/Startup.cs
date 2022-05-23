@@ -1,8 +1,15 @@
+using System.Net.Http;
 using System.Text.Json.Serialization;
+using LibraryAPI.Contexts;
+using LibraryAPI.Providers;
+using LibraryAPI.Repositories;
+using LibraryAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 namespace LibraryAPI
@@ -19,6 +26,18 @@ namespace LibraryAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IBookProvider, BookProvider>();
+            services.AddHttpClient();
+
+
+            services.AddAutoMapper(typeof(Startup));
+
             services
                 .AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));

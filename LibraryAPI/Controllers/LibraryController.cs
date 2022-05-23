@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using LibraryAPI.Enums;
 using LibraryAPI.Models;
+using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
@@ -11,6 +13,15 @@ namespace LibraryAPI.Controllers
     [ApiController]
     public class LibraryController : ControllerBase
     {
+        private readonly IBookService bookService;
+        private readonly IMapper mapper;
+
+        public LibraryController(IBookService bookService, IMapper mapper)
+        {
+            this.bookService = bookService;
+            this.mapper = mapper;
+        }
+
         /// <summary>
         /// Get list of books (Id and Title)
         /// </summary>
@@ -20,7 +31,8 @@ namespace LibraryAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Book>> GetBooks(int page = 0, int limit = 10)
         {
-            return Ok();
+            var books = bookService.GetBooks(page, limit);
+            return Ok(mapper.Map<IEnumerable<Book>>(books));
         }
 
         /// <summary>
@@ -31,7 +43,8 @@ namespace LibraryAPI.Controllers
         [HttpGet("details/{bookId}")]
         public ActionResult<BookDetails> GetBookDetails([FromRoute] Guid bookId)
         {
-            return Ok();
+            var bookDetails = bookService.GetBookDetails(bookId);
+            return Ok(bookDetails);
         }
 
         /// <summary>
@@ -42,7 +55,8 @@ namespace LibraryAPI.Controllers
         [HttpGet("statuses/{bookId}")]
         public ActionResult<IEnumerable<BookStatus>> GetBookStatuses([FromRoute] Guid bookId)
         {
-            return Ok();
+            var statuses = bookService.GetBookStatuses(bookId);
+            return Ok(mapper.Map<IEnumerable<BookStatus>>(statuses));
         }
 
         /// <summary>
@@ -53,7 +67,9 @@ namespace LibraryAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> InsertBook([FromBody] InsertBookDto insertBookDto)
         {
-            return Ok();
+            var book = mapper.Map<BookEntity>(insertBookDto);
+            var bookId = await bookService.AddAsync(book);
+            return Ok(bookId);
         }
 
         /// <summary>

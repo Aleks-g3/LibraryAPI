@@ -7,6 +7,7 @@
         Memoir,
         Politics,
         CrimeThriller,
-        ScienceFiction
+        ScienceFiction,
+        Unknown
     }
 }

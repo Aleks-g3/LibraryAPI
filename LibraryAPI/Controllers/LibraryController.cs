@@ -80,6 +80,7 @@ namespace LibraryAPI.Controllers
         [HttpPost("status/{bookId}")]
         public ActionResult ChangeBookStatus([FromRoute] Guid bookId, [FromBody] Statuses status)
         {
+            bookService.UpdateStatus(bookId, status);
             return Ok();
         }
     }
